@@ -14,7 +14,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
             $table->integer('stock');
-            $table->string('category')->nullable();
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade'); // Relasi ke kategori
             $table->timestamps();
         });
     }

@@ -11,6 +11,7 @@ import TablePagination from "@/components/TablePagination";
 
 export default function Page({ auth, products, filters }: ProductPageProps) {
     // Initialize column visibility state from local storage
+    console.log(products)
     const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>(
         () => {
             const storedVisibility = localStorage.getItem(

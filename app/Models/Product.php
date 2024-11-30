@@ -1,5 +1,5 @@
 <?php
-
+// Product.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,12 +14,19 @@ class Product extends Model
         'description', 
         'price', 
         'stock', 
-        'category'
+        'category_id'
     ];
 
-    // Optional: Add mutators or accessors if needed
+    // Relationship: Product belongs to a Category
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    // Accessor for formatted price
     public function getPriceFormattedAttribute()
     {
         return 'Rp ' . number_format($this->price, 2, ',', '.');
     }
 }
+

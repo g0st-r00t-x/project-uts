@@ -101,7 +101,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {products.map((product) => (
+                {products ? products.map((product) => (
                     <TableRow key={product.id}>
                         {columnVisibility.name && (
                             <TableCell>{product.name}</TableCell>
@@ -116,7 +116,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                             <TableCell>{product.stock}</TableCell>
                         )}
                         {columnVisibility.category && (
-                            <TableCell>{product.category}</TableCell>
+                            <TableCell>{product.category.name}</TableCell>
                         )}
                         <TableCell>
                             <div className="flex space-x-2">
@@ -133,7 +133,15 @@ const ProductTable: React.FC<ProductTableProps> = ({
                             </div>
                         </TableCell>
                     </TableRow>
-                ))}
+                )):
+                    (
+                    <TableRow>
+                        <TableCell colSpan={Object.keys(columnVisibility).length}>
+                            No products found.
+                        </TableCell>
+                    </TableRow>
+                    )
+                }
             </TableBody>
         </Table>
     );

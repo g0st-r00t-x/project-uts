@@ -16,9 +16,13 @@ const TablePagination: React.FC<TablePaginationProps> = ({ links }) => {
                             isActive={link.active}
                         >
                             {link.label === "&laquo; Previous" ? (
-                                <PaginationPrevious className="mr-16" />
+                                <PaginationPrevious 
+                                href=""
+                                className="mr-16" />
                             ) : link.label === "Next &raquo;" ? (
-                                <PaginationNext className="ml-10" />
+                                <PaginationNext 
+                                href=""
+                                className="ml-10" />
                             ) : (
                                 link.label
                             )}

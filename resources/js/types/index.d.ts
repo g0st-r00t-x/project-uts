@@ -19,6 +19,13 @@ export interface ColumnVisibility {
     category: boolean;
 }
 
+
+export type Category = {
+    id: string | number;
+    name: string;
+    description: string;
+}
+
 // Define Product type
 export interface Product {
     id: number;
@@ -26,7 +33,7 @@ export interface Product {
     description: string;
     price: number;
     stock: number;
-    category: string;
+    category: Category;
 }
 
 // Define Filters type
