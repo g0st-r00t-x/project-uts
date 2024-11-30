@@ -1,126 +1,45 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { router } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination";
-import { ConfirmDeleteDialog } from "@/components/ConfirmDeleteDialog";
-import { useToast } from "@/hooks/use-toast";
+import { ColumnVisibility, ProductPageProps } from "@/types";
+import ColumnVisibilityTable from "@/components/ColumnVisibility";
+import ProductTable from "@/components/ProductTable";
+import SearchInput from "@/components/SearchInput";
+import TablePagination from "@/components/TablePagination";
 
-
-// Define Product type
-interface Product {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    stock: number;
-    category: string;
-}
-
-// Define Filters type
-interface Filters {
-    search?: string;
-    sort?: string;
-    direction?: "asc" | "desc";
-}
-
-// Define Page Props type
-interface PageProps {
-    auth: {
-        user: any;
-    };
-    products: {
-        data: Product[];
-        links: Array<{
-            url: string | null;
-            label: string;
-            active: boolean;
-        }>;
-    };
-    filters: Filters;
-}
-
-// Sortable Header Component
-const SortableHeader: React.FC<{
-    column: string;
-    label: string;
-    currentSort?: string;
-    currentDirection?: "asc" | "desc";
-    onSort: (column: string, direction: "asc" | "desc") => void;
-}> = ({ column, label, currentSort, currentDirection, onSort }) => {
-    const isSorted = currentSort === column;
-    const nextDirection = isSorted
-        ? currentDirection === "asc"
-            ? "desc"
-            : "asc"
-        : "asc";
-
-    return (
-        <Button
-            variant="ghost"
-            onClick={() => onSort(column, nextDirection)}
-            className="flex items-center"
-        >
-            {label}
-            {isSorted && (
-                <span className="ml-2">
-                    {currentDirection === "asc" ? "▲" : "▼"}
-                </span>
-            )}
-        </Button>
-    );
-};
-
-export default function Page({ auth, products, filters }: PageProps) {
-    const { toast } = useToast();
-    const [search, setSearch] = useState(filters.search || "");
-    const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(
-        null
-    );
-
-    const handleSearch = (value: string) => {
-        setSearch(value);
-
-        // Debounce search
-        if (searchTimeout) {
-            clearTimeout(searchTimeout);
-        }
-
-        const timeout = setTimeout(() => {
-            router.get(
-                route("products"),
-                {
-                    search: value,
-                    page: 1, // Reset to page 1 when searching
-                    sort: filters.sort,
-                    direction: filters.direction,
-                },
-                {
-                    preserveState: true,
-                    replace: true,
-                }
+export default function Page({ auth, products, filters }: ProductPageProps) {
+    // Initialize column visibility state from local storage
+    const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>(
+        () => {
+            const storedVisibility = localStorage.getItem(
+                "productColumnVisibility"
             );
-        }, 500); // 500ms delay
-
-        setSearchTimeout(timeout);
+            return storedVisibility
+                ? JSON.parse(storedVisibility)
+                : {
+                      name: true,
+                      description: true,
+                      price: true,
+                      stock: true,
+                      category: true,
+                  };
+        }
+    );
+    const toggleColumnVisibility = (column: keyof ColumnVisibility) => {
+        setColumnVisibility((prev) => ({
+            ...prev,
+            [column]: !prev[column],
+        }));
     };
+    // Update local storage when column visibility changes
+    useEffect(() => {
+        localStorage.setItem(
+            "productColumnVisibility",
+            JSON.stringify(columnVisibility)
+        );
+    }, [columnVisibility]);
 
     const handleSort = (column: string, direction: "asc" | "desc") => {
         router.get(
@@ -145,26 +64,7 @@ export default function Page({ auth, products, filters }: PageProps) {
         }).format(price);
     };
 
-    const handleDelete = (id: number) => {
-        router.delete(route("products.destroy", id), {
-            onSuccess: () => {
-                toast({
-                    title: "Product Deleted",
-                    description: "The product has been successfully deleted.",
-                });
-                console.log("Success");
-            },
-            onError: (errors) => {
-                toast({
-                    title: "Error",
-                    description:
-                        "Failed to delete the product. Please try again.",
-                    variant: "destructive",
-                });
-                console.error(errors);
-            },
-        });
-    };
+    // Toggle column visibility
 
     return (
         <AuthenticatedLayout
@@ -174,9 +74,11 @@ export default function Page({ auth, products, filters }: PageProps) {
                     <h2 className="font-semibold text-xl text-gray-800 leading-tight">
                         Products
                     </h2>
-                    <Link href={route("products.create")}>
-                        <Button>Add New Product</Button>
-                    </Link>
+                    <div className="flex items-center space-x-4">
+                        <Link href={route("products.create")}>
+                            <Button>Add New Product</Button>
+                        </Link>
+                    </div>
                 </div>
             }
         >
@@ -184,127 +86,27 @@ export default function Page({ auth, products, filters }: PageProps) {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    {/* Search Input */}
-                    <div className="mb-4">
-                        <Input
-                            placeholder="Search products..."
-                            value={search}
-                            onChange={(e) => handleSearch(e.target.value)}
-                            className="w-full"
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-10">
+                        {/* Search Input */}
+                        <div className="mb-10 flex justify-between">
+                            <SearchInput data={filters} />
+                            {/* Column Visibility Dropdown */}
+                            <ColumnVisibilityTable
+                                columnVisibility={columnVisibility}
+                                toggleColumnVisibility={toggleColumnVisibility}
+                            />
+                        </div>
+                        <ProductTable
+                            products={products.data}
+                            columnVisibility={columnVisibility}
+                            formatPrice={formatPrice}
+                            handleSort={handleSort}
+                            filters={filters}
                         />
-                    </div>
-
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>
-                                        <SortableHeader
-                                            column="name"
-                                            label="Name"
-                                            currentSort={filters.sort}
-                                            currentDirection={filters.direction}
-                                            onSort={handleSort}
-                                        />
-                                    </TableHead>
-                                    <TableHead>Description</TableHead>
-                                    <TableHead>
-                                        <SortableHeader
-                                            column="price"
-                                            label="Price"
-                                            currentSort={filters.sort}
-                                            currentDirection={filters.direction}
-                                            onSort={handleSort}
-                                        />
-                                    </TableHead>
-                                    <TableHead>
-                                        <SortableHeader
-                                            column="stock"
-                                            label="Stock"
-                                            currentSort={filters.sort}
-                                            currentDirection={filters.direction}
-                                            onSort={handleSort}
-                                        />
-                                    </TableHead>
-                                    <TableHead>
-                                        <SortableHeader
-                                            column="category"
-                                            label="Category"
-                                            currentSort={filters.sort}
-                                            currentDirection={filters.direction}
-                                            onSort={handleSort}
-                                        />
-                                    </TableHead>
-                                    <TableHead>Actions</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {products.data.map((product) => (
-                                    <TableRow key={product.id}>
-                                        <TableCell>{product.name}</TableCell>
-                                        <TableCell>
-                                            {product.description}
-                                        </TableCell>
-                                        <TableCell>
-                                            {formatPrice(product.price)}
-                                        </TableCell>
-                                        <TableCell>{product.stock}</TableCell>
-                                        <TableCell>
-                                            {product.category}
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className="flex space-x-2">
-                                                <Link
-                                                    href={route(
-                                                        "products.edit",
-                                                        product.id
-                                                    )}
-                                                >
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                    >
-                                                        Edit
-                                                    </Button>
-                                                </Link>
-                                                <ConfirmDeleteDialog
-                                                    onConfirm={() =>
-                                                        handleDelete(product.id)
-                                                    }
-                                                    title="Delete Product"
-                                                    description={`Are you sure you want to delete the product "${product.name}"? This action cannot be undone.`}
-                                                />
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
 
                         {/* Pagination */}
                         <div className="p-4">
-                            <Pagination>
-                                <PaginationContent>
-                                    {products.links.map((link, index) => (
-                                        <PaginationItem key={index}>
-                                            <PaginationLink
-                                                href={link.url || ""}
-                                                isActive={link.active}
-                                            >
-                                                {link.label ===
-                                                "&laquo; Previous" ? (
-                                                    <PaginationPrevious />
-                                                ) : link.label ===
-                                                  "Next &raquo;" ? (
-                                                    <PaginationNext />
-                                                ) : (
-                                                    link.label
-                                                )}
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                    ))}
-                                </PaginationContent>
-                            </Pagination>
+                            <TablePagination links={products.links} />
                         </div>
                     </div>
                 </div>

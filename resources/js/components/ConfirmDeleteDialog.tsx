@@ -15,14 +15,12 @@ interface ConfirmDeleteDialogProps {
     title?: string;
     description?: string;
     onConfirm: () => void;
-    triggerText?: string;
 }
 
 export function ConfirmDeleteDialog({
     title = "Are you sure?",
     description = "This action cannot be undone. This will permanently delete the item.",
     onConfirm,
-    triggerText = "Delete",
 }: ConfirmDeleteDialogProps) {
     const [open, setOpen] = useState(false);
 
@@ -35,8 +33,7 @@ export function ConfirmDeleteDialog({
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="destructive">
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    {triggerText}
+                    <Trash2 className="h-4 w-4" />
                 </Button>
             </DialogTrigger>
             <DialogContent>
