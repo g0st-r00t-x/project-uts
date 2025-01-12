@@ -1,3 +1,11 @@
+<div align="center">
+    <img src="https://ua.ac.id/wp-content/uploads/2024/02/Logo-wanrna-website.png" alt="Logo Universitas Annuqayah"/>
+    <h1>UNIVERSITAS ANNUQAYAH</a></h1>
+</div>
+
+<h2>Nama: Iamam</h2>
+<h2>Prodi: Teknologi Informasi</h2>
+
 # Aplikasi CRUD dengan Filament
 
 ![Logo Filament](https://filamentphp.com/assets/img/logo.svg)
@@ -86,7 +94,7 @@ Dibuat oleh **[g0st-r00t-x](https://github.com/g0st-r00t-x)** sebagai bagian dar
 
 ### 🌟 Terima kasih telah menjelajahi proyek ini! Jangan lupa beri bintang ⭐ jika Anda merasa proyek ini bermanfaat.
 
-###
+<hr>
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
