@@ -1,6 +1,6 @@
 <div align="center">
-    <img src="https://ua.ac.id/wp-content/uploads/2024/02/Logo-wanrna-website.png" alt="Logo Universitas Annuqayah"/>
-    <h1>UNIVERSITAS ANNUQAYAH</a></h1>
+    <span align="center"><img src="https://ua.ac.id/wp-content/uploads/2024/02/Logo-wanrna-website.png" alt="Logo Universitas Annuqayah"/></span>
+    <span align="right"><h1>UNIVERSITAS ANNUQAYAH</a></h1></span>
 </div>
 
 <h2>Nama: Iamam</h2>
