@@ -1,3 +1,92 @@
+# Aplikasi CRUD dengan Filament
+
+![Logo Filament](https://filamentphp.com/assets/img/logo.svg)
+
+## 📚 Deskripsi Proyek
+Repositori ini berisi **Aplikasi CRUD** yang dibangun menggunakan [FilamentPHP](https://filamentphp.com/), sebuah panel admin modern dan powerful untuk Laravel. Proyek ini merupakan bagian dari **Tugas UAS Semester 5**, yang menunjukkan kemampuan untuk mengimplementasikan operasi Create, Read, Update, dan Delete dengan antarmuka yang intuitif.
+
+## ✨ Fitur
+- **Antarmuka Pengguna yang Mudah Digunakan** didukung oleh Filament.
+- **Operasi CRUD** untuk mengelola data dalam database dengan mudah.
+- **Autentikasi** untuk akses yang aman.
+- **Desain Responsif** untuk penggunaan di berbagai perangkat.
+- **Integrasi Database** dengan ORM Eloquent Laravel.
+
+## 🚀 Teknologi yang Digunakan
+- **Backend**: Laravel Framework
+- **Panel Admin**: FilamentPHP
+- **Database**: MySQL / PostgreSQL / SQLite
+- **Frontend**: TailwindCSS (terintegrasi dengan Filament)
+
+## 📁 Struktur Folder
+```
+├── app/                 # Logika Aplikasi
+├── config/              # File Konfigurasi
+├── database/            # Migrasi dan Seeder Database
+├── public/              # Aset Publik
+├── resources/           # Blade Views dan Komponen Filament
+├── routes/              # Rute Web dan API
+├── storage/             # Penyimpanan Aplikasi
+├── tests/               # Pengujian Otomatis
+└── README.md            # Dokumentasi Proyek
+```
+
+## 🛠️ Instalasi
+Ikuti langkah-langkah berikut untuk menjalankan proyek ini secara lokal:
+
+1. **Clone repositori ini**
+   ```bash
+   git clone https://github.com/g0st-r00t-x/project-uts.git
+   cd project-uts
+   ```
+
+2. **Install dependensi**
+   ```bash
+   composer install
+   npm install && npm run dev
+   ```
+
+3. **Konfigurasi environment**
+   Salin file `.env.example` menjadi `.env` dan sesuaikan pengaturan database Anda:
+   ```bash
+   cp .env.example .env
+   ```
+   Perbarui file `.env` dengan kredensial database Anda.
+
+4. **Jalankan migrasi dan isi database**
+   ```bash
+   php artisan migrate --seed
+   ```
+
+5. **Jalankan server pengembangan**
+   ```bash
+   php artisan serve
+   ```
+
+6. **Akses aplikasi**
+   Buka browser Anda dan kunjungi `http://localhost:8000`.
+
+## 📸 Tangkapan Layar
+### Dashboard
+![Tangkapan Layar Dashboard](https://via.placeholder.com/800x400?text=Dashboard+Screenshot)
+
+### Antarmuka CRUD
+![Tangkapan Layar CRUD](https://via.placeholder.com/800x400?text=CRUD+Screenshot)
+
+## 🤝 Kontribusi
+Kontribusi sangat terbuka! Silakan fork repositori ini dan kirim pull request dengan perbaikan atau fitur baru Anda.
+
+## 📜 Lisensi
+Proyek ini dilisensikan di bawah Lisensi MIT. Lihat file `LICENSE` untuk informasi lebih lanjut.
+
+## 💡 Penulis
+Dibuat oleh **[g0st-r00t-x](https://github.com/g0st-r00t-x)** sebagai bagian dari Tugas UAS Semester 5. Kunjungi repositori asli di [GitHub](https://github.com/g0st-r00t-x/project-uts.git) untuk lebih banyak informasi.
+
+---
+
+### 🌟 Terima kasih telah menjelajahi proyek ini! Jangan lupa beri bintang ⭐ jika Anda merasa proyek ini bermanfaat.
+
+</hr>
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
